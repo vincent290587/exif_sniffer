@@ -78,7 +78,7 @@ listPictures(String directory) async {
   await endDir.list(recursive: true).forEach((entity) {
 
     if (entity is File &&
-        entity.path.endsWith('.JPG')) {
+        (entity.path.endsWith('.jpg') || entity.path.endsWith('.JPG'))) {
 
       DebugLog.writeln(DebugLevel.DEBUG, 'File ' + entity.path);
 
@@ -93,7 +93,7 @@ void main(List<String> arguments) {
 
   final parser = ArgParser()
     ..addOption('dir',
-        help: 'The XML target radio packets definition file')
+        help: 'The directory in which to look for picture files')
     ..addFlag('verbose',
         abbr: 'v',
         defaultsTo: false,
