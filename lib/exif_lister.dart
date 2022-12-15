@@ -31,16 +31,19 @@ printExifOf(String path) async {
     DebugLog.writeln(DebugLevel.DEBUG, "${entry.key}: ${entry.value}");
   }
 
-  var focal = data.entries.firstWhere((element) {
+  MapEntry<String, IfdTag> focal = data.entries.firstWhere((element) {
     if (element.key == 'EXIF FocalLength') {
       return true;
     }
     return false;
-  });
+  }, orElse: () => MapEntry<String, IfdTag>('', IfdTag(tag: 0, tagType: '', printable: '', values: IfdNone())));
 
-  DebugLog.writeln(DebugLevel.INFO, "Picture ${path} focal = ${focal.value}");
+  if (focal.key.isNotEmpty) {
 
-  lFocals[path] = "${focal.value}";
+    DebugLog.writeln(DebugLevel.INFO, "Picture ${path} focal = ${focal.value}");
+
+    lFocals[path] = "${focal.value}";
+  }
 }
 
 createCSV(String directory) async {
@@ -101,12 +104,12 @@ void main(List<String> arguments) {
 
   try {
 
-    // var results = parser.parse(arguments); // TODO uncomment
-    var results = parser.parse(
-        [
-          '--dir', 'C:/Users/vgol/Downloads',
-          // '-v',
-        ]);
+    var results = parser.parse(arguments);
+    // var results = parser.parse(
+    //     [
+    //       '--dir', 'C:/Users/vgol/Downloads',
+    //       // '-v',
+    //     ]);
 
     if (results['verbose']) {
       DEBUG_LEVEL = DebugLevel.DEBUG;
